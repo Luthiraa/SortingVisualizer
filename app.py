@@ -1,19 +1,25 @@
+import logging
 from flask import Flask, render_template, jsonify, request
 import random
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
+logging.basicConfig(level=logging.DEBUG)
+
 @app.route('/')
 def home():
+    app.logger.debug('Home route accessed')
     return render_template('index.html')
 
 @app.route('/generate_array', methods=['GET'])
 def generate_array():
+    app.logger.debug('Generate array route accessed')
     array = [random.randint(1, 100) for _ in range(100)]
     return jsonify(array)
 
 @app.route('/bubble_sort', methods=['POST'])
 def bubble_sort():
+    app.logger.debug('Bubble sort route accessed')
     array = request.json['array']
     steps = []
     for i in range(len(array)):
@@ -25,6 +31,7 @@ def bubble_sort():
 
 @app.route('/insertion_sort', methods=['POST'])
 def insertion_sort():
+    app.logger.debug('Insertion sort route accessed')
     array = request.json['array']
     steps = []
     for i in range(1, len(array)):
@@ -39,6 +46,7 @@ def insertion_sort():
 
 @app.route('/selection_sort', methods=['POST'])
 def selection_sort(): 
+    app.logger.debug('Selection sort route accessed')
     array = request.json['array']
     steps = []
     for i in range(len(array)-1): 
@@ -52,4 +60,4 @@ def selection_sort():
     return jsonify(steps)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
